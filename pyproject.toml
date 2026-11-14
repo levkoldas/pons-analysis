@@ -1,0 +1,186 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pons-analysis"
+dynamic = ["version"]
+description = "Typed Python library for PONS launch and wallet analysis"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "levkoldas", email = "l.koldas@proton.me" }]
+keywords = ["pons", "evm", "ethereum", "defi", "token-analysis", "uniswap-v4"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Office/Business :: Financial :: Investment",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+requires-python = ">=3.12"
+dependencies = [
+    "eth-abi>=6.0,<7",
+    "eth-hash[pycryptodome]>=0.8,<1",
+    "eth-utils>=6.0,<7",
+    "httpx>=0.28.1,<1",
+    "orjson>=3.13,<4",
+    "pydantic>=2.14.3,<3",
+    "tenacity>=9.2.1,<10",
+]
+
+[project.optional-dependencies]
+frames = [
+    "numpy>=2.5.4,<3",
+    "pandas>=3.1.1,<4",
+    "polars>=2.1,<3",
+    "pyarrow>=26.0.1,<27",
+]
+sql = [
+    "duckdb>=2.0,<3",
+    "pyarrow>=26.0.1,<27",
+    "pytz>=2024.1",
+]
+graph = ["networkx>=3.7,<4"]
+cli = [
+    "rich>=15,<16",
+    "typer>=0.29.1,<1",
+]
+all = [
+    "duckdb>=2.0,<3",
+    "networkx>=3.7,<4",
+    "numpy>=2.5.4,<3",
+    "pandas>=3.1.1,<4",
+    "polars>=2.1,<3",
+    "pyarrow>=26.0.1,<27",
+    "pytz>=2024.1",
+    "rich>=15,<16",
+    "typer>=0.29.1,<1",
+]
+dev = [
+    "build>=1.2,<2",
+    "duckdb>=2.0,<3",
+    "hypothesis>=6.170.15,<7",
+    "import-linter>=2.16,<3",
+    "mypy>=2.4.1,<3",
+    "networkx>=3.7,<4",
+    "numpy>=2.5.4,<3",
+    "pandas>=3.1.1,<4",
+    "polars>=2.1,<3",
+    "pyarrow>=26.0.1,<27",
+    "pytest>=9.2,<10",
+    "pytz>=2024.1",
+    "rich>=15,<16",
+    "ruff>=0.17.5,<1",
+    "typer>=0.29.1,<1",
+]
+
+[project.scripts]
+pons-analysis = "pons_analysis.cli_entry:run"
+
+[project.urls]
+Homepage = "https://github.com/levkoldas/pons-analysis"
+Repository = "https://github.com/levkoldas/pons-analysis"
+Issues = "https://github.com/levkoldas/pons-analysis/issues"
+Changelog = "https://github.com/levkoldas/pons-analysis/blob/main/CHANGELOG.md"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = {attr = "pons_analysis._version.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["pons_analysis*"]
+
+[tool.setuptools.package-data]
+pons_analysis = ["py.typed"]
+
+[tool.ruff]
+target-version = "py312"
+exclude = [".venv"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP", "B", "PIE", "RET", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+# Typer options must be constructed in argument defaults.
+"src/pons_analysis/presentation/cli/**" = ["B008"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.mypy]
+python_version = "3.12"
+files = [
+    "src/pons_analysis/__init__.py",
+    "src/pons_analysis/config/run.py",
+    "src/pons_analysis/core/evm.py",
+    "src/pons_analysis/core/models.py",
+    "src/pons_analysis/credentials.py",
+    "src/pons_analysis/discovery.py",
+    "src/pons_analysis/frames.py",
+    "src/pons_analysis/pons.py",
+    "src/pons_analysis/ports.py",
+    "src/pons_analysis/results.py",
+    "src/pons_analysis/run.py",
+    "src/pons_analysis/storage/overlay.py",
+]
+check_untyped_defs = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+no_implicit_optional = true
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = [
+    "pons_analysis.config.*",
+    "pons_analysis.credentials",
+    "pons_analysis.discovery",
+    "pons_analysis.frames",
+    "pons_analysis.pons",
+    "pons_analysis.ports",
+    "pons_analysis.results",
+    "pons_analysis.run",
+]
+disallow_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = [
+    "pons_analysis.analytics.*",
+    "pons_analysis.evidence.*",
+    "pons_analysis.presentation.*",
+    "pons_analysis.providers.*",
+    "pons_analysis.storage.store",
+    "pons_analysis.validation.*",
+    "pons_analysis.workflows.*",
+]
+ignore_errors = true
+
+[tool.importlinter]
+root_package = "pons_analysis"
+
+[[tool.importlinter.contracts]]
+name = "Layered architecture"
+type = "layers"
+layers = [
+    "pons_analysis.presentation",
+    "pons_analysis.workflows",
+    "pons_analysis.run",
+    "pons_analysis.validation",
+    "pons_analysis.evidence",
+    "pons_analysis.analytics",
+    "pons_analysis.providers",
+    "pons_analysis.storage",
+    "pons_analysis.config",
+    "pons_analysis.core",
+]
