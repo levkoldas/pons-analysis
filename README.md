@@ -61,16 +61,38 @@ flowchart LR
 
 ## Install
 
-Requires **Python 3.12 or newer**.
+Requires **Python 3.12 or newer**. The package is distributed through GitHub,
+not PyPI. The repository must be public for anonymous installs.
+
+Install the latest `main`:
 
 ```bash
-pip install pons-analysis
+pip install "pons-analysis @ git+https://github.com/levkoldas/pons-analysis.git"
+```
+
+If the repository is private, authorized users can install over SSH instead:
+
+```bash
+pip install "pons-analysis @ git+ssh://git@github.com/levkoldas/pons-analysis.git"
+```
+
+Pin a tagged release:
+
+```bash
+pip install "pons-analysis @ git+https://github.com/levkoldas/pons-analysis.git@v0.1.0"
 ```
 
 Install the optional integrations you need:
 
 ```bash
-pip install 'pons-analysis[all]'
+pip install "pons-analysis[all] @ git+https://github.com/levkoldas/pons-analysis.git"
+```
+
+Every tagged release also publishes a wheel. Install it directly from the
+release asset, replacing the tag and filename with the version you want:
+
+```bash
+pip install https://github.com/levkoldas/pons-analysis/releases/download/v0.1.0/pons_analysis-0.1.0-py3-none-any.whl
 ```
 
 | Extra | Contents |
@@ -284,7 +306,7 @@ config = RunConfig(cache="offline")  # "online", "offline", or "refresh"
 The CLI is a thin adapter over the same library:
 
 ```bash
-pip install 'pons-analysis[cli]'
+pip install "pons-analysis[cli] @ git+https://github.com/levkoldas/pons-analysis.git"
 ```
 
 Collection, analysis, and reporting are separate commands, so a full run is:
@@ -387,7 +409,8 @@ make check PYTHON=.venv/bin/python
 `make check` runs Ruff linting and formatting, mypy on the typed public API,
 pytest, the import-linter architecture contract, and an import smoke test. CI
 runs the same gate on Python 3.12, 3.13, and 3.14, then builds and validates the
-sdist and wheel.
+sdist and wheel. Pushing a `v*` tag runs the release workflow and attaches those
+artifacts to a GitHub Release.
 
 ## Contributing
 

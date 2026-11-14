@@ -6,6 +6,12 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- Distribution is GitHub-only: install from the repository or a tagged release
+  wheel. PyPI publication is not enabled.
+- Tag pushes now build and attach sdist and wheel assets to a GitHub Release.
+
 ## [0.1.0] - 2026-11-13
 
 First public release.

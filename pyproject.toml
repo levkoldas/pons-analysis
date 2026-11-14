@@ -89,6 +89,7 @@ Homepage = "https://github.com/levkoldas/pons-analysis"
 Repository = "https://github.com/levkoldas/pons-analysis"
 Issues = "https://github.com/levkoldas/pons-analysis/issues"
 Changelog = "https://github.com/levkoldas/pons-analysis/blob/main/CHANGELOG.md"
+Download = "https://github.com/levkoldas/pons-analysis/releases"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

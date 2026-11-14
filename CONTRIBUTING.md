@@ -51,6 +51,22 @@ make check PYTHON=.venv/bin/python
 - Match the existing style: explicit dataclasses, typed modules, and no
   environment or working-directory reads on import.
 
+## Releases
+
+`pons-analysis` is distributed through GitHub only; there is no PyPI
+publication. To cut a release:
+
+1. Update `__version__` in `src/pons_analysis/_version.py` and move the
+   changelog entry from `Unreleased` to the new version in `CHANGELOG.md`.
+2. Commit the change and push `main`.
+3. Create and push an annotated tag, for example
+   `git tag -a v0.2.0 -m "v0.2.0" && git push origin v0.2.0`.
+
+The `Release` workflow builds the sdist and wheel, validates both with
+`twine check`, and attaches them to a GitHub Release. Users can then install
+the tagged source or the release wheel directly; see the README install
+section.
+
 ## Reporting bugs
 
 Open an issue with the command or Python snippet that reproduces the problem,
